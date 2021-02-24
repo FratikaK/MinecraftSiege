@@ -1,0 +1,71 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+group = 'com.github.FratikaK'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: junit_version
+    testRuntimeOnly group: 'junit', name: 'junit', version: junit_version
+    compile "org.spigotmc:spigot-api:$spigot_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+buildscript {
+    ext {
+        junit_version = '4.12'
+        kotlin_version = '1.4.30'
+        spigot_version = '1.16.4-R0.1-SNAPSHOT'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
+    }
+}
+
+jar {
+    from{
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+task exportJartoBin(type: Copy,dependsOn: 'jar'){
+    from jar
+    into 'C:/Users/c0meb/Documents/SiegeCraftServer/RainbowSixCraft/plugins/'
+}

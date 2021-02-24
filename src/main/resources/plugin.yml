@@ -1,0 +1,4 @@
+name: SiegeCraft
+version: @version@
+main: com.github.fratikak.siegecraft.SiegeCraft
+api-version: 1.16
