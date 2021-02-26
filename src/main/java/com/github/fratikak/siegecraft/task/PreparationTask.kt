@@ -21,8 +21,8 @@ class PreparationTask: BukkitRunnable() {
 
         //0秒になったらゲーム開始のEventを呼び出す
         if (preparationTime <= 0){
-            Bukkit.getPluginManager().callEvent(SiegeStartEvent())
             SiegeManager.isPreparation = false
+            Bukkit.getPluginManager().callEvent(SiegeStartEvent())
             cancel()
         }
 
@@ -33,12 +33,13 @@ class PreparationTask: BukkitRunnable() {
         }
 
         if (preparationTime <= 5) {
+            Bukkit.broadcastMessage("[Siege]ゲーム開始まで$preparationTime 秒")
             for (player in Bukkit.getOnlinePlayers()) {
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 24f)
             }
         }
 
-        preparationTime -= 1
+        preparationTime--
     }
 
 
