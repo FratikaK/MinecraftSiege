@@ -20,7 +20,7 @@ object SiegeManager {
     var coreHealth: Int = 0
 
     //制限時間
-    var timeLeft = 0
+    const val timeLeft = 240
 
     //攻撃チームのスコア
     var blueScore: Int = 0
@@ -65,7 +65,6 @@ object SiegeManager {
             blueTeam.add(player)
         }
 
-        timeLeft = 240
         //コアヘルスは攻撃チームの人数に比例して増加する
         coreHealth = blueTeam.size * 10
 
@@ -75,19 +74,9 @@ object SiegeManager {
         blueScore = 0
         redScore = 0
 
-        //各チームをそれぞれのスポーンポイントに移動させる
-        for (player in blueTeam) {
-            //TODO テレポート処理
-        }
-        for (player in redTeam) {
-            //TODO テレポート処理
-        }
-
         isMatching = true
 
-        //TODO 全プレイヤーにスコアボードを表示する
-
-        //TODO ゲームカウントダウンを行うTaskの開始
+        //TODO TEAMの登録
 
     }
 
