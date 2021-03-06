@@ -22,6 +22,9 @@ object SiegeManager {
     //制限時間
     const val timeLeft = 240
 
+    //現在使用しているステージID
+    var stageID = 0
+
     //攻撃チームのスコア
     var blueScore: Int = 0
 
