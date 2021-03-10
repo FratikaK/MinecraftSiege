@@ -1,6 +1,7 @@
 package com.github.fratikak.siegecraft.task
 
 import com.github.fratikak.siegecraft.SiegeManager
+import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
 class GameCountDownTask : BukkitRunnable() {
@@ -8,6 +9,16 @@ class GameCountDownTask : BukkitRunnable() {
     private var timeLeft = SiegeManager.timeLeft
 
     override fun run() {
+
+        if (!SiegeManager.isMatching){
+            Bukkit.getLogger().info("[GameCountDownTask]isMatchingがtrueでない為キャンセルしました")
+            cancel()
+        }
+
+        if (SiegeManager.isPreparation){
+            Bukkit.getLogger().info("[gameCountDownTask]isPreparationがfalseである為キャンセルしました")
+            cancel()
+        }
 
         //TODO updateScoreboard(toTimeLeft)
 
