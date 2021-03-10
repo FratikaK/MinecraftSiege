@@ -13,9 +13,6 @@ object SiegeManager {
     //準備タスク中か
     var isPreparation: Boolean = false
 
-    //スタートカウントダウン中か
-    var isStarting: Boolean = false
-
     //コアの耐久度
     var coreHealth: Int = 0
 
@@ -82,6 +79,7 @@ object SiegeManager {
         //TODO TEAMの登録
 
     }
+
 
     /**
      * チームの初期化を行う
