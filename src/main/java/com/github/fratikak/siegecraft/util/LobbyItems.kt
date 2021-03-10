@@ -51,7 +51,7 @@ object LobbyItems {
      * @param itemLore つけたいアイテムの説明文
      * @return 名前と説明文が付与されているアイテム
      */
-    fun getMetaItem(material: Material, itemName: String, itemLore: String): ItemStack {
+    private fun getMetaItem(material: Material, itemName: String, itemLore: String): ItemStack {
         val item = ItemStack(material)
         val meta = item.itemMeta
         meta?.setDisplayName(itemName)
