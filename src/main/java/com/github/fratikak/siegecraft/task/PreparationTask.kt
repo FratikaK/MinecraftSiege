@@ -19,6 +19,12 @@ class PreparationTask: BukkitRunnable() {
             cancel()
         }
 
+        if (SiegeManager.gamePlayers.isEmpty()){
+            Bukkit.getLogger().info("[PreparationTask]gamePlayersが空である為、キャンセルされました")
+            SiegeManager.isPreparation = false
+            cancel()
+        }
+
         //0秒になったらゲーム開始のEventを呼び出す
         if (preparationTime <= 0){
             SiegeManager.isPreparation = false
