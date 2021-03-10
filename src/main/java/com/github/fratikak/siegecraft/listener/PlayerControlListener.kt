@@ -1,6 +1,5 @@
 package com.github.fratikak.siegecraft.listener
 
-import com.github.fratikak.siegecraft.SiegeCraft
 import com.github.fratikak.siegecraft.SiegeManager
 import com.github.fratikak.siegecraft.task.RecoveryStaminaTask
 import com.github.fratikak.siegecraft.task.SprintControlTask
