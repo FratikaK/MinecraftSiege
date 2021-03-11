@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin
 /**
  * ゲームに関係するEventについて処理する
  */
-class SiegeControlListener(val plugin: Plugin) : Listener {
+class SiegeControlListener(private val plugin: Plugin) : Listener {
 
     @EventHandler
     fun onSiegeStart(e: SiegeStartEvent) {
@@ -51,22 +51,22 @@ class SiegeControlListener(val plugin: Plugin) : Listener {
         //TODO それぞれのプレイヤーに武器を配布する
 
         //GameCountDownTaskの開始
-        GameCountDownTask().runTaskTimer(plugin,0,20)
+        GameCountDownTask().runTaskTimer(plugin, 0, 20)
     }
 
     /**
      * ゲームに参加させる処理をします
      */
     @EventHandler
-    fun onPlayerJoinSiege(e:SiegeJoinPlayerEvent){
+    fun onPlayerJoinSiege(e: SiegeJoinPlayerEvent) {
         val player = e.player
 
-        if (SiegeManager.gamePlayers.contains(player)){
+        if (SiegeManager.gamePlayers.contains(player)) {
             player.sendMessage("[Siege]" + ChatColor.RED + "すでにゲームに参加しています")
             return
         }
 
-        if (SiegeManager.isPreparation){
+        if (SiegeManager.isPreparation) {
             SiegeManager.gamePlayers.add(player)
             player.sendMessage("[Siege]" + ChatColor.GREEN + "ゲームに参加します")
             return
@@ -75,21 +75,21 @@ class SiegeControlListener(val plugin: Plugin) : Listener {
         SiegeManager.gamePlayers.add(player)
 
         //試合中であれば途中参加
-        if (SiegeManager.isMatching){
+        if (SiegeManager.isMatching) {
             SiegeManager.gamePlayers.add(player)
             if (SiegeManager.blueTeam.size > SiegeManager.redTeam.size) {
                 SiegeManager.redTeam.add(player)
-                teleportStageRed(SiegeManager.stageID,player)
+                teleportStageRed(SiegeManager.stageID, player)
                 return
             }
             SiegeManager.blueTeam.add(player)
-            teleportStageBlue(SiegeManager.stageID,player)
+            teleportStageBlue(SiegeManager.stageID, player)
         }
     }
 
     private fun teleportStageBlue(stageId: Int, p: Player) {
         when (stageId) {
-            0 -> p.teleport(GameStage.APARTMENT.redLocation(p))
+            0 -> p.teleport(GameStage.APARTMENT.blueLocation(p))
         }
     }
 
