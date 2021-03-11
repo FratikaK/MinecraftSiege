@@ -24,7 +24,7 @@ class LobbyItemListener(private val plugin: Plugin) : Listener {
     fun onDiamondInteract(e: PlayerInteractEvent) {
 
         //左クリックでインタラクト、所持アイテムがダイアモンドでなければreturn
-        if (e.action != Action.RIGHT_CLICK_AIR || e.action != Action.RIGHT_CLICK_BLOCK) {
+        if (e.action == Action.LEFT_CLICK_AIR || e.action == Action.LEFT_CLICK_BLOCK) {
             return
         }
         if (e.player.itemInHand.type != Material.DIAMOND) {
@@ -33,6 +33,7 @@ class LobbyItemListener(private val plugin: Plugin) : Listener {
 
         if (manager.gamePlayers.contains(e.player)){
             e.player.sendMessage("[Siege]" + ChatColor.RED + "すでにゲームに参加しています")
+            return
         }
 
         //試合中、準備フェーズ中でなければ、PreparationTaskを開始します
