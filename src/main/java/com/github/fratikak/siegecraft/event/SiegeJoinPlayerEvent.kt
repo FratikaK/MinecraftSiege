@@ -4,14 +4,18 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-class SiegeJoinPlayerEvent(joinPlayer: Player): Event() {
-
-    private val HandlerList : HandlerList = HandlerList()
+class SiegeJoinPlayerEvent(val player: Player) : Event() {
 
     override fun getHandlers(): HandlerList {
-        return HandlerList
+        return HANDLERS
     }
-    //Getter
-    val player : Player = joinPlayer
 
+    companion object {
+        private val HANDLERS = HandlerList()
+
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return HANDLERS
+        }
+    }
 }
