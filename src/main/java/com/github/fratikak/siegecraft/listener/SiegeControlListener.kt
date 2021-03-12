@@ -6,9 +6,11 @@ import com.github.fratikak.siegecraft.event.SiegeStartEvent
 import com.github.fratikak.siegecraft.task.GameCountDownTask
 import com.github.fratikak.siegecraft.util.GameStage
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 /**
@@ -38,6 +40,9 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
             player.sendMessage(ChatColor.GOLD.toString() + "--------------------------")
             player.sendMessage(ChatColor.GOLD.toString() + "[勝利条件]：コアの破壊")
             player.sendMessage(ChatColor.GOLD.toString() + "--------------------------")
+
+            //武器の配布
+            player.inventory.addItem(ItemStack(Material.GOLDEN_PICKAXE))
         }
         for (player in SiegeManager.redTeam) {
             //ステージIDに対応したステージにテレポート
@@ -46,10 +51,9 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
             player.sendMessage(ChatColor.GOLD.toString() + "--------------------------")
             player.sendMessage(ChatColor.GOLD.toString() + "[勝利条件]：残り時間が0になる")
             player.sendMessage(ChatColor.GOLD.toString() + "--------------------------")
+
+            //TODO 武器の配布
         }
-
-        //TODO それぞれのプレイヤーに武器を配布する
-
         //GameCountDownTaskの開始
         GameCountDownTask().runTaskTimer(plugin, 0, 20)
     }
