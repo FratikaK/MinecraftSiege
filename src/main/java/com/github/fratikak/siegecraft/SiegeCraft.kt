@@ -1,15 +1,14 @@
 package com.github.fratikak.siegecraft
 
-import com.github.fratikak.siegecraft.listener.JoinQuitListener
-import com.github.fratikak.siegecraft.listener.LobbyItemListener
-import com.github.fratikak.siegecraft.listener.PlayerControlListener
-import com.github.fratikak.siegecraft.listener.SiegeControlListener
+import com.github.fratikak.siegecraft.listener.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class SiegeCraft : JavaPlugin() {
     override fun onEnable() {
         // Plugin startup logic
+        Bukkit.getPluginManager().registerEvents(BlockControlListener(),this)
+        Bukkit.getPluginManager().registerEvents(CoreControlListener(),this)
         Bukkit.getPluginManager().registerEvents(JoinQuitListener(), this)
         Bukkit.getPluginManager().registerEvents(LobbyItemListener(this),this)
         Bukkit.getPluginManager().registerEvents(PlayerControlListener(this), this)
