@@ -2,6 +2,7 @@ package com.github.fratikak.siegecraft.task
 
 import com.github.fratikak.siegecraft.SiegeManager
 import com.github.fratikak.siegecraft.event.SiegeStartEvent
+import com.github.fratikak.siegecraft.util.ScoreBoardSystem
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.scheduler.BukkitRunnable
@@ -10,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable
  * 準備フェーズのカウントダウンを行う
  */
 class PreparationTask: BukkitRunnable() {
-    private var preparationTime = 20
+    var preparationTime = 20
 
     override fun run() {
 
@@ -35,6 +36,7 @@ class PreparationTask: BukkitRunnable() {
         if (preparationTime <= 20){
             for (player in Bukkit.getOnlinePlayers()){
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f)
+                ScoreBoardSystem(player).updateScoreBoard()
             }
         }
 

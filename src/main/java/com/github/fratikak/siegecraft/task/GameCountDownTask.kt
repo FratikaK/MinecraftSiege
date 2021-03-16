@@ -1,6 +1,7 @@
 package com.github.fratikak.siegecraft.task
 
 import com.github.fratikak.siegecraft.SiegeManager
+import com.github.fratikak.siegecraft.util.ScoreBoardSystem
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -20,7 +21,10 @@ class GameCountDownTask : BukkitRunnable() {
             cancel()
         }
 
-        //TODO updateScoreboard(toTimeLeft)
+        //スコアボード更新
+        for (player in Bukkit.getOnlinePlayers()){
+            ScoreBoardSystem(player).updateScoreBoard()
+        }
 
         if (SiegeManager.coreHealth <= 0){
             cancel()
