@@ -91,7 +91,7 @@ object SiegeManager {
         //キルデス数を別のスコアに格納しておく
         for (player in gamePlayers) {
             val getKills = player.getStatistic(Statistic.PLAYER_KILLS)
-            val getDeaths = player.getStatistic(Statistic.CAKE_SLICES_EATEN)
+            val getDeaths = player.getStatistic(Statistic.DEATHS)
             player.setStatistic(Statistic.ITEM_ENCHANTED, getKills)
             player.setStatistic(Statistic.ANIMALS_BRED, getDeaths)
 
