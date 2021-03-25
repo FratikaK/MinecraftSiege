@@ -1,10 +1,13 @@
 package com.github.fratikak.siegecraft.listener
 
 import com.github.fratikak.siegecraft.SiegeManager
+import com.github.fratikak.siegecraft.event.SiegeFinishEvent
 import com.github.fratikak.siegecraft.event.SiegeJoinPlayerEvent
 import com.github.fratikak.siegecraft.event.SiegeStartEvent
 import com.github.fratikak.siegecraft.task.GameCountDownTask
+import com.github.fratikak.siegecraft.task.PreparationTask
 import com.github.fratikak.siegecraft.util.GameStage
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -88,6 +91,28 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
             }
             SiegeManager.blueTeam.add(player)
             teleportStageBlue(SiegeManager.stageID, player)
+        }
+    }
+
+    /**
+     * ゲームが終了する時の処理
+     */
+    @EventHandler
+    fun onSiegeFinish(e: SiegeFinishEvent) {
+        if (!SiegeManager.isFinish) {
+            return
+        }
+        //チームを初期化
+        SiegeManager.initializeTeams()
+        //全プレイヤーを初期スポーンへ移動
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.teleport(player.world.spawnLocation)
+        }
+
+        //ゲームプレイヤーが2人以上いればPreparationTaskを開始
+        if (SiegeManager.gamePlayers.size >= 2) {
+            SiegeManager.isPreparation = true
+            PreparationTask().runTaskTimer(plugin, 0, 20)
         }
     }
 
