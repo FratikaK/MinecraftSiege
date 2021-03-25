@@ -13,6 +13,9 @@ object SiegeManager {
     //準備タスク中か
     var isPreparation: Boolean = false
 
+    //終了タスク中か
+    var isFinish : Boolean = false
+
     //コアの耐久度
     var coreHealth: Int = 0
 
