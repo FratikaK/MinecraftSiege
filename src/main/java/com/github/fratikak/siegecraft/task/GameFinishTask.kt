@@ -10,6 +10,7 @@ class GameFinishTask : BukkitRunnable() {
     private var timeLeft = 20
     override fun run() {
         if (SiegeManager.isMatching) {
+            Bukkit.getLogger().info("[GameFinishTask]isMatchingがtrueの為実行を終了しました")
             cancel()
             return
         }
@@ -17,12 +18,13 @@ class GameFinishTask : BukkitRunnable() {
             cancel()
             return
         }
-        if (SiegeManager.isFinish) {
+        if (!SiegeManager.isFinish) {
+            Bukkit.getLogger().info("[GameFinishTask]isFinishがfalseの為実行を終了しました")
             cancel()
             return
         }
         if (timeLeft <= 0) {
-            SiegeManager.isFinish = false
+            cancel()
             Bukkit.getPluginManager().callEvent(SiegeFinishEvent())
             return
         }
