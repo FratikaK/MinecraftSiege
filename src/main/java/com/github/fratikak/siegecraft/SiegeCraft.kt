@@ -7,10 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin
 class SiegeCraft : JavaPlugin() {
     override fun onEnable() {
         // Plugin startup logic
-        Bukkit.getPluginManager().registerEvents(BlockControlListener(),this)
-        Bukkit.getPluginManager().registerEvents(CoreControlListener(),this)
+        Bukkit.getPluginManager().registerEvents(BlockControlListener(), this)
+        Bukkit.getPluginManager().registerEvents(CoreControlListener(this), this)
         Bukkit.getPluginManager().registerEvents(JoinQuitListener(), this)
-        Bukkit.getPluginManager().registerEvents(LobbyItemListener(this),this)
+        Bukkit.getPluginManager().registerEvents(LobbyItemListener(this), this)
         Bukkit.getPluginManager().registerEvents(PlayerControlListener(this), this)
         Bukkit.getPluginManager().registerEvents(SiegeControlListener(this), this)
     }
