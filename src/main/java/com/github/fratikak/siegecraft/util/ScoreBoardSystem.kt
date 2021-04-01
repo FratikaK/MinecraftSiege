@@ -35,7 +35,7 @@ class ScoreBoardSystem(@NotNull val player: Player) {
             messageList.add(ChatColor.AQUA.toString() + "ClassLevel : ${ChatColor.GOLD}${player.level}")
             messageList.add("")
 
-            messageList.add("ゲーム開始まで${PreparationTask().preparationTime}秒")
+            messageList.add("ゲーム開始まで${SiegeManager.preparationTime}秒")
             messageList.add("")
             return messageList
 
@@ -46,11 +46,12 @@ class ScoreBoardSystem(@NotNull val player: Player) {
             messageList.add("")
             messageList.add(ChatColor.BLUE.toString() + "攻撃チーム : $bluePoint ")
             messageList.add(ChatColor.RED.toString() + "防衛チーム : $redPoint ")
+            messageList.add("CoreHealth : " + ChatColor.YELLOW + manager.coreHealth)
             messageList.add("")
             messageList.add("kills : ${player.getStatistic(Statistic.PLAYER_KILLS)}")
             messageList.add("deaths : ${player.getStatistic(Statistic.DEATHS)}")
             messageList.add("所持金 : ${ChatColor.GOLD}${player.getStatistic(Statistic.BANNER_CLEANED)}")
-            messageList.add("TimeLeft  ${GameCountDownTask().toTimeLeft()}")
+            messageList.add("TimeLeft  ${SiegeManager.timeLeft}")
             messageList.add("")
             return messageList
         }
@@ -59,6 +60,10 @@ class ScoreBoardSystem(@NotNull val player: Player) {
 
     private val scoreBoard = Bukkit.getScoreboardManager()?.newScoreboard
 
+    /**
+     * スコアボードを更新します
+     * GameCountDownTaskで1秒毎に実行する想定
+     */
     fun updateScoreBoard(){
 
         //参加プレイヤーがいなければreturn
