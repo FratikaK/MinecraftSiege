@@ -35,6 +35,16 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
         val stageID = 0  //TODO ステージを増やす度に乱数の範囲を広げる
         SiegeManager.stageID = stageID
 
+        //使用するステージが決まっているのでリスポーンLocationを登録する
+        for (player in SiegeManager.gamePlayers) {
+            when (stageID) {
+                0 -> {
+                    SiegeManager.blueLocation = GameStage.APARTMENT.blueLocation(player)
+                    SiegeManager.redLocation = GameStage.APARTMENT.redLocation(player)
+                }
+            }
+        }
+
         //各チームをそれぞれのスポーンポイントに移動させる
         for (player in SiegeManager.blueTeam) {
             //ステージIDに対応したステージにテレポート
@@ -109,10 +119,16 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
             player.teleport(player.world.spawnLocation)
         }
 
+        SiegeManager.isFinish = false
+        SiegeManager.initializeTeams()
+        SiegeManager.initParam()
+
         //ゲームプレイヤーが2人以上いればPreparationTaskを開始
         if (SiegeManager.gamePlayers.size >= 2) {
             SiegeManager.isPreparation = true
             PreparationTask().runTaskTimer(plugin, 0, 20)
+        }else{
+            SiegeManager.gamePlayers.clear()
         }
     }
 
