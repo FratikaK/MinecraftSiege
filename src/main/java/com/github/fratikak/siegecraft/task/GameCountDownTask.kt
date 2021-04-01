@@ -5,9 +5,11 @@ import com.github.fratikak.siegecraft.util.ScoreBoardSystem
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
+/**
+ * ゲームの残り時間カウント、スコアボード更新など
+ * １秒毎に更新したい内容を反映するタスク
+ */
 class GameCountDownTask : BukkitRunnable() {
-
-    private var timeLeft = SiegeManager.timeLeft
 
     override fun run() {
 
@@ -30,15 +32,6 @@ class GameCountDownTask : BukkitRunnable() {
             cancel()
         }
 
-        timeLeft--
-    }
-
-    /**
-     * 試合残り時間を分:秒表示にする
-     */
-    fun toTimeLeft(): String {
-        val min = (timeLeft % 3600) / 60
-        val sec = timeLeft % 60
-        return "$min:$sec"
+        SiegeManager.timeLeft--
     }
 }
