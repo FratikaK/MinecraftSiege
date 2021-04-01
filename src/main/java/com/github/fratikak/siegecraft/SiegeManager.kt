@@ -2,6 +2,7 @@ package com.github.fratikak.siegecraft
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.Location
 import org.bukkit.Statistic
 import org.bukkit.entity.Player
 
@@ -14,13 +15,16 @@ object SiegeManager {
     var isPreparation: Boolean = false
 
     //終了タスク中か
-    var isFinish : Boolean = false
+    var isFinish: Boolean = false
 
     //コアの耐久度
     var coreHealth: Int = 0
 
+    //準備Task時間
+    var preparationTime = 20
+
     //制限時間
-    const val timeLeft = 240
+    var timeLeft = 240
 
     //現在使用しているステージID
     var stageID = 0
@@ -39,6 +43,10 @@ object SiegeManager {
 
     //ゲームに参加している全てのプレイヤー
     var gamePlayers = mutableListOf<Player>()
+
+    //それぞれのチームリスポーン地点
+    var blueLocation: Location? = null
+    var redLocation: Location? = null
 
     /**
      * ゲームの開始の処理を行う
@@ -100,7 +108,22 @@ object SiegeManager {
 
             //スコアのリセット
             player.setStatistic(Statistic.PLAYER_KILLS, 0)
-            player.setStatistic(Statistic.CAKE_SLICES_EATEN, 0)
+            player.setStatistic(Statistic.DEATHS, 0)
         }
+    }
+
+    /**
+     * 数値の初期化処理をします
+     */
+    fun initParam() {
+        isMatching = false
+        isPreparation = false
+        isFinish = false
+        coreHealth = 0
+        preparationTime = 20
+        timeLeft = 240
+        stageID = 0
+        blueScore = 0
+        redScore = 0
     }
 }
