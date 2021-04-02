@@ -2,9 +2,11 @@ package com.github.fratikak.siegecraft.listener
 
 import com.github.fratikak.siegecraft.SiegeManager
 import com.github.fratikak.siegecraft.task.RecoveryStaminaTask
+import com.github.fratikak.siegecraft.task.SpectatorTask
 import com.github.fratikak.siegecraft.task.SprintControlTask
-import com.github.fratikak.siegecraft.util.GameStage
 import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -32,7 +34,7 @@ class PlayerControlListener(private val plugin: Plugin) : Listener {
         }
 
         val player = e.entity as Player
-        if (manager.isMatching) {
+        if (!manager.isMatching) {
             e.isCancelled = true
         }
         //voidダメージならば初期スポーンへ
@@ -43,21 +45,34 @@ class PlayerControlListener(private val plugin: Plugin) : Listener {
         }
     }
 
+    private var deathLocation :Location? = null
     @EventHandler
     fun onPlayerDeath(e: PlayerDeathEvent) {
-        //TODO 死亡メッセージの編集
+        deathLocation = e.entity.location
     }
 
+    /**
+     * プレイヤーがリスポーンする場合の処理をします
+     */
     @EventHandler
     fun onPlayerRespawn(e: PlayerRespawnEvent) {
         val player = e.player
-        //TODO 観戦Task実行
+        //試合中であれば復帰処理、試合中でなければロビーへ
         if (manager.isMatching) {
+            e.respawnLocation = deathLocation!!
+            player.sendTitle(
+                "${ChatColor.RED}You are Dead!", "${ChatColor.WHITE}10秒後に復活します",
+                20, 100, 20
+            )
+            player.gameMode = GameMode.SPECTATOR
+            //どちらのチームに所属しているかで復帰場所を変える
             if (manager.blueTeam.contains(player)) {
-                e.respawnLocation = manager.blueLocation!!
-            }else if (manager.redTeam.contains(player)){
-                e.respawnLocation = manager.redLocation!!
+                SpectatorTask(player, true).runTaskTimer(plugin, 0, 20)
+            } else if (manager.redTeam.contains(player)) {
+                SpectatorTask(player, false).runTaskTimer(plugin, 0, 20)
             }
+        } else {
+            e.respawnLocation = player.world.spawnLocation
         }
     }
 
