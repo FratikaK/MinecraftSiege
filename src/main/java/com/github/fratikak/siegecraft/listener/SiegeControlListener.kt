@@ -68,7 +68,7 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
             //TODO 武器の配布
         }
         //GameCountDownTaskの開始
-        GameCountDownTask().runTaskTimer(plugin, 0, 20)
+        GameCountDownTask(plugin).runTaskTimer(plugin, 0, 20)
     }
 
     /**
