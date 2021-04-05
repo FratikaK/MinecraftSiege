@@ -19,7 +19,7 @@ class CoreControlListener(private val plugin: Plugin) : Listener{
 
     @EventHandler
     fun onSiegeCoreDamage(e: CoreDamageEvent){
-        //
+        //コアヘルスが0以下であればreturn
         if(SiegeManager.coreHealth <= 0){
             return
         }
@@ -28,6 +28,11 @@ class CoreControlListener(private val plugin: Plugin) : Listener{
         SiegeManager.coreHealth--
         Bukkit.broadcastMessage("[Siege]" + ChatColor.GOLD + "コアの残り耐久値: " + SiegeManager.coreHealth)
 
+        //コアにダメージを与えたプレイヤーの所持金を加算
+        e.player.setStatistic(Statistic.BANNER_CLEANED,e.player.getStatistic(Statistic.BANNER_CLEANED) + 20)
+        e.player.sendMessage("${ChatColor.GOLD}コアにダメージ！ +$20")
+
+        //コアにダメージが入ったことを知らせる音を鳴らす
         for (player in Bukkit.getOnlinePlayers()){
             player.playSound(player.location, Sound.BLOCK_ANVIL_PLACE,2f,0f)
         }

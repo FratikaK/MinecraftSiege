@@ -3,6 +3,7 @@ package com.github.fratikak.siegecraft.task
 import com.github.fratikak.siegecraft.SiegeManager
 import com.github.fratikak.siegecraft.util.ScoreBoardSystem
 import org.bukkit.Bukkit
+import org.bukkit.Statistic
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -24,8 +25,9 @@ class GameCountDownTask(private val plugin: Plugin) : BukkitRunnable() {
             cancel()
         }
 
-        //スコアボード更新
+        //スコアボード更新、所持金加算
         for (player in Bukkit.getOnlinePlayers()){
+            player.setStatistic(Statistic.BANNER_CLEANED,player.getStatistic(Statistic.BANNER_CLEANED) + 5)
             ScoreBoardSystem(player).updateScoreBoard()
         }
 

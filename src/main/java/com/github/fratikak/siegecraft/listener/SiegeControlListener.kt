@@ -10,6 +10,7 @@ import com.github.fratikak.siegecraft.util.GameStage
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.Statistic
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -117,6 +118,8 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
         //全プレイヤーを初期スポーンへ移動
         for (player in Bukkit.getOnlinePlayers()) {
             player.teleport(player.world.spawnLocation)
+            //所持金リセット
+            player.setStatistic(Statistic.BANNER_CLEANED, 0)
         }
 
         SiegeManager.isFinish = false
@@ -127,7 +130,7 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
         if (SiegeManager.gamePlayers.size >= 2) {
             SiegeManager.isPreparation = true
             PreparationTask().runTaskTimer(plugin, 0, 20)
-        }else{
+        } else {
             SiegeManager.gamePlayers.clear()
         }
     }

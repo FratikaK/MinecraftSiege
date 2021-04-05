@@ -20,7 +20,7 @@ class BlockControlListener : Listener {
 
         if (e.block.type == Material.DIAMOND_BLOCK){
             e.isCancelled = true
-            Bukkit.getPluginManager().callEvent(CoreDamageEvent())
+            Bukkit.getPluginManager().callEvent(CoreDamageEvent(e.player))
         }
     }
 
