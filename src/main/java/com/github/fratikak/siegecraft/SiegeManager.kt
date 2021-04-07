@@ -1,5 +1,6 @@
 package com.github.fratikak.siegecraft
 
+import com.github.fratikak.siegecraft.util.TeamSystem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -71,24 +72,21 @@ object SiegeManager {
         for (player in gamePlayers) {
             if (blueTeam.size > redTeam.size) {
                 redTeam.add(player)
+                TeamSystem().setPlayerTeams(player)
                 continue
             }
             blueTeam.add(player)
+            TeamSystem().setPlayerTeams(player)
         }
 
         //コアヘルスは攻撃チームの人数に比例して増加する
         coreHealth = blueTeam.size * 10
-
-        //TODO マップの抽選の処理を記述しておく
 
         //スコア初期化
         blueScore = 0
         redScore = 0
 
         isMatching = true
-
-        //TODO TEAMの登録
-
     }
 
 
@@ -96,20 +94,34 @@ object SiegeManager {
      * チームの初期化を行う
      */
     fun initializeTeams() {
+        //Teamからプレイヤーを削除
+        for (player in Bukkit.getOnlinePlayers()) {
+            TeamSystem().removePlayerTeams(player)
+        }
+
+        //リストを空にする
         blueTeam.clear()
         redTeam.clear()
 
         //キルデス数を別のスコアに格納しておく
         for (player in gamePlayers) {
-            val getKills = player.getStatistic(Statistic.PLAYER_KILLS)
-            val getDeaths = player.getStatistic(Statistic.DEATHS)
-            player.setStatistic(Statistic.ITEM_ENCHANTED, getKills)
-            player.setStatistic(Statistic.ANIMALS_BRED, getDeaths)
-
-            //スコアのリセット
-            player.setStatistic(Statistic.PLAYER_KILLS, 0)
-            player.setStatistic(Statistic.DEATHS, 0)
+            scoreRegistration(player)
         }
+    }
+
+    /**
+     * キルデス数を別の統計に格納します
+     * @param player 処理したいプレイヤー
+     */
+    fun scoreRegistration(player: Player){
+        val getKills = player.getStatistic(Statistic.PLAYER_KILLS)
+        val getDeaths = player.getStatistic(Statistic.DEATHS)
+        player.setStatistic(Statistic.ITEM_ENCHANTED, getKills)
+        player.setStatistic(Statistic.ANIMALS_BRED, getDeaths)
+
+        //スコアのリセット
+        player.setStatistic(Statistic.PLAYER_KILLS, 0)
+        player.setStatistic(Statistic.DEATHS, 0)
     }
 
     /**
