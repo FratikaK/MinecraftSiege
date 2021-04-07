@@ -3,10 +3,13 @@ package com.github.fratikak.siegecraft.listener
 import com.github.fratikak.siegecraft.SiegeManager
 import com.github.fratikak.siegecraft.event.SiegeFinishEvent
 import com.github.fratikak.siegecraft.event.SiegeJoinPlayerEvent
+import com.github.fratikak.siegecraft.event.SiegeQuitPlayerEvent
 import com.github.fratikak.siegecraft.event.SiegeStartEvent
 import com.github.fratikak.siegecraft.task.GameCountDownTask
 import com.github.fratikak.siegecraft.task.PreparationTask
 import com.github.fratikak.siegecraft.util.GameStage
+import com.github.fratikak.siegecraft.util.ScoreBoardSystem
+import com.github.fratikak.siegecraft.util.TeamSystem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -94,14 +97,41 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
 
         //試合中であれば途中参加
         if (SiegeManager.isMatching) {
-            SiegeManager.gamePlayers.add(player)
             if (SiegeManager.blueTeam.size > SiegeManager.redTeam.size) {
                 SiegeManager.redTeam.add(player)
+                TeamSystem().setPlayerTeams(player)
                 teleportStageRed(SiegeManager.stageID, player)
                 return
             }
             SiegeManager.blueTeam.add(player)
+            TeamSystem().setPlayerTeams(player)
             teleportStageBlue(SiegeManager.stageID, player)
+        }
+    }
+
+    /**
+     * ゲームプレイヤーがログアウトした時の処理
+     */
+    @EventHandler
+    fun onPlayerQuitSiege(e:SiegeQuitPlayerEvent){
+        val player = e.player
+        //ゲームプレイヤーではないならreturn
+        if (!SiegeManager.gamePlayers.contains(player)){
+            return
+        }
+
+        //Teamの解除、リストから削除
+        TeamSystem().removePlayerTeams(player)
+        if (SiegeManager.blueTeam.contains(player)){
+            SiegeManager.blueTeam.remove(player)
+        }else{
+            SiegeManager.redTeam.remove(player)
+        }
+        SiegeManager.gamePlayers.remove(player)
+
+        //試合中であればキルデス数を別の統計に格納しておく
+        if (SiegeManager.isMatching){
+            SiegeManager.scoreRegistration(player)
         }
     }
 
@@ -117,6 +147,7 @@ class SiegeControlListener(private val plugin: Plugin) : Listener {
         SiegeManager.initializeTeams()
         //全プレイヤーを初期スポーンへ移動
         for (player in Bukkit.getOnlinePlayers()) {
+            ScoreBoardSystem(player).clearSideBar()
             player.teleport(player.world.spawnLocation)
             //所持金リセット
             player.setStatistic(Statistic.BANNER_CLEANED, 0)
